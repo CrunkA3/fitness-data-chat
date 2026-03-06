@@ -2,6 +2,17 @@
 
 An AI-powered fitness data analysis web application with a chat interface. Connect your Strava and Garmin accounts to get insights, trends, and visualizations from your training data using natural language.
 
+## Screenshots
+
+### Landing Page
+![Fitness Data Chat – Landing Page](https://github.com/user-attachments/assets/cf75e3bc-2016-4c45-ba1b-6b901cdb3cda)
+
+### AI Chat Interface
+![Fitness Data Chat – Chat Interface](https://github.com/user-attachments/assets/83c226c0-1090-4156-8a5f-b47ecf1f8b7a)
+
+### Analytics Dashboard
+![Fitness Data Chat – Dashboard](https://github.com/user-attachments/assets/66a3948f-abdb-4bff-a7b1-6aae4e5eaee9)
+
 ## Features
 
 - 💬 **LLM Chat Interface** – Ask natural language questions about your training data powered by GPT-4
@@ -27,7 +38,7 @@ An AI-powered fitness data analysis web application with a chat interface. Conne
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/fitness-data-chat.git
+git clone https://github.com/CrunkA3/fitness-data-chat.git
 cd fitness-data-chat
 ```
 
@@ -172,7 +183,7 @@ fitness-data-chat/
 │   │   └── services/         # Business logic (LLM, Strava, Garmin, Analytics)
 │   ├── requirements.txt
 │   └── Dockerfile
-├── frontend/                 # Next.js 14 React frontend
+├── frontend/                 # Next.js 15 React frontend
 │   ├── app/                  # Next.js App Router pages
 │   ├── components/           # React components
 │   │   ├── chat/             # Chat UI components
@@ -184,7 +195,7 @@ fitness-data-chat/
 ```
 
 **Tech Stack:**
-- **Frontend**: Next.js 14, React 18, TypeScript, Tailwind CSS, Recharts
+- **Frontend**: Next.js 15, React 18, TypeScript, Tailwind CSS, Recharts
 - **Backend**: FastAPI, SQLAlchemy, LangChain, OpenAI GPT-4
 - **Database**: PostgreSQL 16
 - **Cache**: Redis 7
