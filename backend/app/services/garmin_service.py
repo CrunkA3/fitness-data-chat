@@ -24,6 +24,8 @@ class GarminService:
             self.db.add(user)
 
         user.garmin_email = email
+        # NOTE: In production, encrypt the password before storing it.
+        user.garmin_password = password
         self.db.commit()
 
     async def get_activities(self, user_id: int, limit: int = 30) -> list[dict]:
@@ -36,12 +38,12 @@ class GarminService:
 
         from garminconnect import Garmin
 
-        # NOTE: In production, retrieve the stored (encrypted) password from user record.
-        # Storing plaintext passwords is not recommended; use a secrets manager instead.
-        if not user.garmin_password_encrypted:
+        # NOTE: In production, use a secrets manager or proper encryption instead of
+        # storing plaintext passwords. This is a simplified implementation.
+        if not user.garmin_password:
             raise ValueError("Garmin password not stored for this user")
 
-        client = Garmin(user.garmin_email, user.garmin_password_encrypted)
+        client = Garmin(user.garmin_email, user.garmin_password)
 
         activities = client.get_activities(0, limit)
         return list(activities)

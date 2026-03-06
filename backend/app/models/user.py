@@ -15,7 +15,7 @@ class User(Base):
     strava_refresh_token: Mapped[str | None] = mapped_column(Text, nullable=True)
     strava_token_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     garmin_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    garmin_password_encrypted: Mapped[str | None] = mapped_column(Text, nullable=True)
+    garmin_password: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), nullable=False
     )

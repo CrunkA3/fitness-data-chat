@@ -167,7 +167,8 @@ export function streamChatMessage(
                     onChunk(parsed.chunk);
                   }
                 } catch {
-                  // Ignore parse errors
+                  // SSE lines that aren't valid JSON (e.g. empty keep-alive lines) are
+                  // safely ignored — they carry no payload data.
                 }
               }
             }
