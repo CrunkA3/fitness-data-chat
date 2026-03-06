@@ -48,3 +48,4 @@ htmlcov/
 # Build artifacts
 *.pyc
 dist/
+frontend/next-env.d.ts
