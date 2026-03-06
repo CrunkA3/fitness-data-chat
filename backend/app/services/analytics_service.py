@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy.orm import Session
 
 from app.models.activity import Activity
@@ -44,7 +46,7 @@ class AnalyticsService:
 
         recent = sorted(
             activities,
-            key=lambda a: a.start_date or __import__("datetime").datetime.min,
+            key=lambda a: a.start_date or datetime.min,
             reverse=True,
         )[:5]
 

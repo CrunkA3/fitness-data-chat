@@ -36,8 +36,12 @@ class GarminService:
 
         from garminconnect import Garmin
 
-        client = Garmin(user.garmin_email, "")
-        client.login()
+        # NOTE: In production, retrieve the stored (encrypted) password from user record.
+        # Storing plaintext passwords is not recommended; use a secrets manager instead.
+        if not user.garmin_password_encrypted:
+            raise ValueError("Garmin password not stored for this user")
+
+        client = Garmin(user.garmin_email, user.garmin_password_encrypted)
 
         activities = client.get_activities(0, limit)
         return list(activities)

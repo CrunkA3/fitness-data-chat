@@ -28,7 +28,7 @@ def create_tables() -> None:
 
 def get_db():
     """Dependency to get database session."""
-    db = Session(engine)
+    db = SessionLocal()
     try:
         yield db
     finally:
