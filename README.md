@@ -74,7 +74,19 @@ cp .env.example .env.local
 
 ### 4. Configure Environment Variables
 
-**Backend** (`backend/.env`):
+Create your environment files from the provided examples:
+
+```bash
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env.local
+```
+
+Then edit each file with your own credentials as described below.
+
+---
+
+#### Backend (`backend/.env`)
+
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/fitness_data
 OPENAI_API_KEY=sk-...
@@ -88,10 +100,51 @@ REDIS_URL=redis://localhost:6379
 SECRET_KEY=your-secret-key-here
 ```
 
-**Frontend** (`frontend/.env.local`):
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | ✅ Yes | PostgreSQL connection string in the format `postgresql://<user>:<password>@<host>:<port>/<dbname>`. The default example uses `localhost:5432` and a database named `fitness_data`. When using Docker Compose this is automatically set to the internal `postgres` service. |
+| `OPENAI_API_KEY` | ✅ Yes | Your OpenAI API key used to power the GPT-4 Turbo chat interface. Obtain one from the [OpenAI API platform](https://platform.openai.com/api-keys). The key starts with `sk-`. Without this key the chat and analytics features will not work. |
+| `STRAVA_CLIENT_ID` | ⚙️ Optional | The numeric Client ID for your Strava API application. Required only if you want to connect Strava accounts. Create an app at [Strava API Settings](https://www.strava.com/settings/api) to get this value. |
+| `STRAVA_CLIENT_SECRET` | ⚙️ Optional | The Client Secret for your Strava API application. Found alongside the Client ID on the [Strava API Settings](https://www.strava.com/settings/api) page. Keep this value private and never commit it to source control. |
+| `STRAVA_REDIRECT_URI` | ⚙️ Optional | The OAuth 2.0 callback URL that Strava redirects to after a user authorizes the app. Must exactly match the **Authorization Callback Domain** registered in your Strava app settings. Default: `http://localhost:8000/api/strava/callback`. Change the host/port for production deployments. |
+| `GARMIN_EMAIL` | ⚙️ Optional | The email address of the Garmin Connect account whose data you want to import. Required only if you want to sync Garmin device data. |
+| `GARMIN_PASSWORD` | ⚙️ Optional | The password for the Garmin Connect account above. **Never commit real passwords to source control.** In production, consider using a secrets manager instead of a plain `.env` file. |
+| `CORS_ORIGINS` | ✅ Yes | Comma-separated list of frontend origins that are allowed to call the backend API (e.g. `http://localhost:3000` for local development or `https://your-app.example.com` for production). Multiple origins can be specified: `http://localhost:3000,https://app.example.com`. |
+| `REDIS_URL` | ✅ Yes | Connection URL for the Redis instance used for caching. Format: `redis://<host>:<port>`. Default: `redis://localhost:6379`. When using Docker Compose this is automatically set to `redis://redis:6379`. |
+| `SECRET_KEY` | ✅ Yes | A long, random secret string used for signing tokens and securing sessions. **Change this to a strong, unique value in production** (see the generation command below). |
+
+To generate a secure value for `SECRET_KEY`, run:
+
+```bash
+python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+##### How to obtain Strava credentials
+
+1. Go to [https://www.strava.com/settings/api](https://www.strava.com/settings/api) and log in.
+2. Click **Create & Manage Your App**.
+3. Fill in the application name, website, and set the **Authorization Callback Domain** to `localhost` (for development) or your production domain.
+4. After saving, copy the **Client ID** and **Client Secret** into `STRAVA_CLIENT_ID` and `STRAVA_CLIENT_SECRET`.
+
+##### How to obtain an OpenAI API key
+
+1. Sign in or create an account at [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys).
+2. Click **Create new secret key**.
+3. Copy the key (it starts with `sk-`) and paste it into `OPENAI_API_KEY`. Store it securely — it will not be shown again.
+
+---
+
+#### Frontend (`frontend/.env.local`)
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_API_URL` | ✅ Yes | The full base URL of the backend API. Because it is prefixed with `NEXT_PUBLIC_`, Next.js exposes it to the browser at build time. Set this to `http://localhost:8000` for local development. For production, replace it with your deployed backend URL (e.g. `https://api.your-app.example.com`). All frontend API calls — including chat, Strava/Garmin auth, and analytics — are routed through this URL. |
+
+> **Note:** `NEXT_PUBLIC_` variables are embedded into the browser bundle at build time. Do **not** place sensitive secrets in frontend environment variables.
 
 ### 5. Database Migrations
 
